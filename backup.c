@@ -18,6 +18,24 @@ struct temp_files {
 
 struct temp_files* head = NULL;
 
+int scrub(char *buf)
+{
+   int size = sizeof(buf), ret = 0;
+   strlcpy(buf, buf, size);
+   
+   int i = 0;
+   for (i = 0; i < size; ++i)
+   {
+      char c = buf[i];
+      if (c == '.' or c == '/' or c == '\\' or c == '#')
+      {
+         ret = -1;
+         buf[i] = 'E';
+      }
+   }
+   buf[strlen(buf) - 1] = '\0';
+}
+
 int readline(char *buf, int size) {
   int i;
   for(i = 0; i < size; i++) {
@@ -136,9 +154,13 @@ void remove_all_files()
 
 void store_all_files()
 {
-   char filename[120];
+   char filename[256];
    FILE* new_file;
    struct temp_files* tmp;
+   
+   scrub(name);
+   scrub(password);
+   
    filename[0] = '\0';
    strcat(filename, name);
    strcat(filename, "_");
