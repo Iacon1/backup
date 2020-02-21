@@ -29,11 +29,12 @@ int scrub(char *buf)
       char c = buf[i];
       if (c == '.' or c == '/' or c == '\\' or c == '#')
       {
-         ret = -1;
+         ret = 1;
          buf[i] = 'E';
       }
    }
    buf[strlen(buf) - 1] = '\0';
+   return ret;
 }
 
 int readline(char *buf, int size) {
